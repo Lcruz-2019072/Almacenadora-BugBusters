@@ -7,7 +7,7 @@ import tareaRoutes from '../Tareas/tareas.routes.js'
 import cors from 'cors'
 
 const app = express()
-    config();
+    config()
     const port = process.env.PORT || 3001
 
     app.use(express.urlencoded({extended: false}))
@@ -17,6 +17,5 @@ const app = express()
     app.use('/tarea', tareaRoutes)
 
     export const initServer = ()=>{
-        app.listen(port)
-        console.log(`Server HTTP running in port ${port}`)
+        app.listen(port, () => console.log(`Server HTTP running in port ${port}`))
     }

@@ -24,7 +24,7 @@ import './ListaTareas.css';
 export const TodoListForm = () => {
     const { addTask, updateTask, deleteTask, isLoading, getTasks, tasks } = useTask();
 
-    const [formData, setFormData] = useState({
+    const initialFormData = {
         nombre: {
             value: "",
             isValid: false,
@@ -60,8 +60,9 @@ export const TodoListForm = () => {
             isValid: false,
             showError: false
         }
-    });
+    };
 
+    const [formData, setFormData] = useState(initialFormData);
     const [editingTaskId, setEditingTaskId] = useState(null);
 
     const getClassEstado = (estado) => {
@@ -155,7 +156,7 @@ export const TodoListForm = () => {
 
     const handleAddTask = async (e) => {
         e.preventDefault();
-        if(!validateFechaInicioFin(formData.fechaInicio.value, formData.fechaFin.value)){
+        if (!validateFechaInicioFin(formData.fechaInicio.value, formData.fechaFin.value)) {
             return toast.error('La fecha de inicio debe ser menor a la fecha de fin');
         }
         try {
@@ -182,43 +183,7 @@ export const TodoListForm = () => {
                 );
                 toast.success('Tarea agregada correctamente');
             }
-            setFormData({
-                nombre: {
-                    value: "",
-                    isValid: false,
-                    showError: false
-                },
-                description: {
-                    value: "",
-                    isValid: false,
-                    showError: false
-                },
-                fechaInicio: {
-                    value: "",
-                    isValid: false,
-                    showError: false
-                },
-                fechaFin: {
-                    value: "",
-                    isValid: false,
-                    showError: false
-                },
-                estado: {
-                    value: "",
-                    isValid: false,
-                    showError: false
-                },
-                nombreUsuario: {
-                    value: "",
-                    isValid: false,
-                    showError: false
-                },
-                apellidoUsuario: {
-                    value: "",
-                    isValid: false,
-                    showError: false
-                }
-            });
+            setFormData(initialFormData);
             setEditingTaskId(null);
             fetchTasks();
         } catch (error) {
@@ -282,6 +247,10 @@ export const TodoListForm = () => {
                 toast.error('Error al eliminar la tarea');
             }
         }
+    };
+
+    const cancel = () => {
+        setFormData(initialFormData);
     };
 
     const isSubmitButtonDisabled =
@@ -377,8 +346,11 @@ export const TodoListForm = () => {
                     validationMessage={apellidoUsuarioValidationMessage}
                 />
                 <div></div>
-                <button disabled={isSubmitButtonDisabled}>
+                <button type="submit" disabled={isSubmitButtonDisabled}>
                     {editingTaskId ? 'Actualizar Tarea' : 'Agregar Tarea'}
+                </button>
+                <button type="button" onClick={cancel} >
+                    Cancelar
                 </button>
             </form>
             <div className="table-container">
